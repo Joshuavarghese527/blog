@@ -2,36 +2,38 @@
 <html>
 <head>
   <title>Blog</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
-  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', 'http://fonts.googleapis.com/css?family=Raleway:400,700' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= favicon_link_tag 'favicon.ico' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <div id="sidebar">
     <div id="logo">
       <%= link_to root_path do %>
-      <%= image_tag "logo.svg" %>
+        <%= image_tag "logo.svg" %>
       <% end %>
-      </div>
-
-      <ul>
-        <li class="category">Website</li>
-        <li><%= link_to "Blog", root_path %></li>
-        <li><%=link_to "About", about_path%></li>
-      </ul>
-
-      <ul>
-        <li class="category">Social</li>
-        <li><a href="https://github.com/Joshuavarghese527">Github</a></li>
-        <li><a href= "https://www.facebook.com/joshua.varghese.5">Facebook</a></li>
-        <li><a href="mailto:joshuavarghese527@gmail.com">Email</a></li>
-      </ul>
-
-      <p class="sign_in">Admin Login</p>
     </div>
-    
-<div id="main_content">
+
+    <ul>
+      <li class="category">Website</li>
+      <li><%= link_to "Blog", root_path %></li>
+      <li><%= link_to "About", about_path %></li>
+    </ul>
+
+    <ul>
+      <li class="category">Social</li>
+      <li><a href="https://github.com/Joshuavarghese527">Github</a></li>
+      <li><a href="mailto:joshuavarghese527@gmail.com">Email</a></li>
+    </ul>
+
+    <% if !user_signed_in? %>
+      <p class="sign_in"><%= link_to "Admin Login", new_user_session_path %></p>
+    <% end %>
+  </div>
+
+  <div id="main_content">
     <div id="header">
       <% if current_page?(root_path) %>
         <p>All Posts</p>
@@ -41,20 +43,19 @@
         <%= link_to "Back to All Posts", root_path %>
       <% end %>
 
-    <div class="buttons">
-    <button class="button"><%= link_to "New Post", new_post_path %></button> 
-        <button class="button">Log Out</button>
+      <% if user_signed_in? %>
+        <div class="buttons">
+          <button class="button"><%= link_to "New Post", new_post_path %></button>
+          <button class="button">Log Out</button>
         </div>
-      </div>
-
-      <% flash.each do |name, msg| %>
-      <%= content_tag(:div, msg, class: "alert") %>
       <% end %>
+    </div>
 
+    <% flash.each do |name, msg| %>
+      <%= content_tag(:div, msg, class: "alert") %>
+    <% end %>
 
-<%= yield %>
-
-   </div>
-
+    <%= yield %>
+  </div>
 </body>
 </html>
